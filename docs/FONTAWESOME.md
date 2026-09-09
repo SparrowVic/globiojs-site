@@ -43,6 +43,9 @@ the token, even when the production site has one configured.
 - The build removes Font Awesome credential variables before launching Vite.
   Vite resolves the two original family imports to their local ESM entry points.
   Named imports remain tree-shakeable; the full icon catalog is not bundled.
+- After a successful production build, every file in `dist/` is scanned for the
+  literal package token. A match fails the build with the affected filename;
+  the credential value is never logged.
 - After the production build, the isolated Pro installation is removed so it
   cannot become part of a later deployment's dependency cache.
 - GitHub Actions and non-production Netlify builds always use the Free mapping,

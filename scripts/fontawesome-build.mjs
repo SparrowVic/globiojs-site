@@ -1,6 +1,8 @@
 import { spawnSync } from 'node:child_process';
 import { rm } from 'node:fs/promises';
+import path from 'node:path';
 import { installProIcons } from './fontawesome-install.mjs';
+import { assertNoFontAwesomeTokenInAssets } from './fontawesome-assets.mjs';
 import { proDirectory, siteRoot, withoutFontAwesomeCredentials } from './fontawesome-config.mjs';
 
 const production = process.env.NETLIFY === 'true'
@@ -16,6 +18,10 @@ try {
     stdio: 'inherit',
   });
   if (result.error) throw new Error('Could not start the site build. Ensure pnpm is installed.');
+  if (production && result.status === 0) {
+    const checked = await assertNoFontAwesomeTokenInAssets(path.join(siteRoot, 'dist'), process.env.FONTAWESOME_PACKAGE_TOKEN);
+    console.log(`Checked ${checked} production assets: no Font Awesome Package Token found.`);
+  }
   process.exitCode = result.status ?? 1;
 } catch (error) {
   console.error(error.message);
