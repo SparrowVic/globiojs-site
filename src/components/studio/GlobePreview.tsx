@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { DataLayer, GlobeConfig, GlobeInstance } from '@globiojs/core';
 
 import { structuralGlobeKey } from '@/configurator/builders';
@@ -16,6 +16,7 @@ export interface FocusBehavior {
 
 export function GlobePreview({
   config,
+  paused = false,
   themeRevision = 0,
   dataLayer,
   focus,
@@ -24,6 +25,8 @@ export function GlobePreview({
   command,
 }: {
   readonly config: GlobeRuntimeConfig;
+  /** Stop background rendering while project tools cover the scene. */
+  readonly paused?: boolean;
   /** Rebuild edited registry tokens: theme is a construction-time core setting. */
   readonly themeRevision?: number;
   readonly dataLayer: DataLayer | null;
@@ -36,6 +39,8 @@ export function GlobePreview({
   const [failure, setFailure] = useState<Error | null>(null);
   const [attempt, setAttempt] = useState(0);
   const instanceRef = useRef<GlobeInstance | null>(null);
+  const pausedRef = useRef(paused);
+  pausedRef.current = paused;
   const configRef = useRef(config);
   const dataLayerRef = useRef(dataLayer);
   dataLayerRef.current = dataLayer;
@@ -46,6 +51,13 @@ export function GlobePreview({
   const commandRef = useRef(0);
   const resetCameraRef = useRef<((duration: number) => void) | null>(null);
   const rebuildKey = useMemo(() => `${structuralGlobeKey(config)}:${themeRevision}`, [config, themeRevision]);
+
+  // Apply before the modal's first paint: a full-screen cinematic scene behind
+  // backdrop blur otherwise competes with typing and focus on software GPUs.
+  // This changes only rendering; camera, layer and animation settings survive.
+  useLayoutEffect(() => {
+    instanceRef.current?.setPaused(paused);
+  }, [paused]);
 
   useEffect(() => {
     configRef.current = config;
@@ -138,6 +150,7 @@ export function GlobePreview({
       subscriptions.push(() => canvas.removeEventListener('webglcontextlost', contextLost));
 
       frameHome(0);
+      globe.setPaused(pausedRef.current);
       globe.mount();
       // Apply the latest layer even when it changed during the runtime
       // download, or this rebuild preserved the same dataLayer reference.

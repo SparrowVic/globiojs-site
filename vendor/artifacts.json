@@ -3,35 +3,35 @@
     "name": "@globiojs/core",
     "version": "0.1.0",
     "tarball": "globiojs-core-0.1.0.tgz",
-    "bytes": 1807449,
+    "bytes": 1807448,
     "fileCount": 10
   },
   {
     "name": "globiojs",
     "version": "0.1.0",
     "tarball": "globiojs-0.1.0.tgz",
-    "bytes": 2178,
+    "bytes": 2229,
     "fileCount": 7
   },
   {
     "name": "@globiojs/react",
     "version": "0.1.0",
     "tarball": "globiojs-react-0.1.0.tgz",
-    "bytes": 5424,
+    "bytes": 5431,
     "fileCount": 9
   },
   {
     "name": "@globiojs/vue",
     "version": "0.1.0",
     "tarball": "globiojs-vue-0.1.0.tgz",
-    "bytes": 7699,
+    "bytes": 7702,
     "fileCount": 9
   },
   {
     "name": "@globiojs/angular",
     "version": "0.1.0",
     "tarball": "globiojs-angular-0.1.0.tgz",
-    "bytes": 14011,
+    "bytes": 14010,
     "fileCount": 14
   }
 ]

@@ -469,6 +469,7 @@ export default function Studio() {
       <main className="studio-workspace fixed inset-0 overflow-hidden bg-slate-950 text-slate-50" data-testid="studio-status" data-ready={status.ready}>
         <GlobePreview
           config={globeConfig}
+          paused={transferMode !== null}
           themeRevision={themeRevision}
           dataLayer={dataLayer}
           focus={{

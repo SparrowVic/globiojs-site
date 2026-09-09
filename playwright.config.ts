@@ -17,7 +17,9 @@ export default defineConfig({
     baseURL: `http://127.0.0.1:${port}`,
     actionTimeout: 15_000,
     navigationTimeout: 45_000,
-    trace: 'retain-on-failure',
+    // Preserve DOM/action diagnostics without continuously copying large WebGL
+    // frames from SwiftShader. Failure screenshots are still captured below.
+    trace: { mode: 'retain-on-failure', screenshots: false, snapshots: true, sources: true },
     screenshot: 'only-on-failure',
     headless: process.env.GLOBIO_HEADED !== '1',
     launchOptions: { args: ['--enable-webgl', '--ignore-gpu-blocklist', '--enable-unsafe-swiftshader'] },

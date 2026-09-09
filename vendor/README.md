@@ -1,6 +1,6 @@
 # Bootstrap package artifacts
 
-Package source: [SparrowVic/globiojs@c8f6f8a](https://github.com/SparrowVic/globiojs/tree/c8f6f8a).
+Package source: [SparrowVic/globiojs@0d11f79](https://github.com/SparrowVic/globiojs/tree/0d11f79).
 
 Version 0.1.0. These are real publishable package archives pending the first npm publication. Core, React, Vue and the Vanilla alias were packed with pnpm; Angular was packed from its APF dist directory with npm.
 
@@ -9,11 +9,11 @@ The packed-consumer checks passed: ESM and CommonJS imports, TypeScript declarat
 SHA-256 checksums:
 
 ```text
-40fb8fb8584a84205799e971f8b0cbc55e690a2202b942476c0895015e83e9aa  globiojs-0.1.0.tgz
-66928e4c5bb9d93e2254fc2e80da9b9ed175d4f468eb42967e2f05c794cee1ac  globiojs-angular-0.1.0.tgz
-8c6fbe86efaac82ae766f1d52d9bfce0fe078035df52ad8c43045a0e94b42d31  globiojs-core-0.1.0.tgz
-e44ef257ebce7c23fb5e1a1a8e577360a607d7e4a4f4e9eabb31e08c94952a3a  globiojs-react-0.1.0.tgz
-ab2698843967c3bd0b37b71847498b1d8157e46ed9df765cb199e365c0ab37c1  globiojs-vue-0.1.0.tgz
+1b2543f91d05301e57cef37abfe5a9b219bf63f0d60822bfb8bcc9743c970447  globiojs-0.1.0.tgz
+709c52a7f26aeb623569808b71ad0ffa989ad1a24cf1d875b08028a82511befd  globiojs-angular-0.1.0.tgz
+4143de6654db41dde1cdd23baeae44f3a05ad15869a5bda1eb1e87e836739696  globiojs-core-0.1.0.tgz
+60b89edadfbd75a18be2bdff88e9a7d710f544e8435fa12280392116bedf8597  globiojs-react-0.1.0.tgz
+d1aa61926516cb02198a5546e0ba1f6250274efe74a53dc9f077ddf692b3f2ef  globiojs-vue-0.1.0.tgz
 ```
 
 After the npm release, replace file dependencies with the corresponding published versions and remove these bootstrap archives.

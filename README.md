@@ -12,7 +12,7 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-No Font Awesome token is required. Local builds and public pull requests use Font Awesome Free equivalents. Production on Netlify uses the original Pro icons with a secret available only to the production build. See [Font Awesome setup](docs/FONTAWESOME.md).
+No Font Awesome token is required. Local builds and public pull requests use Font Awesome Free equivalents. Production on Netlify uses the original Pro icons with a secret available only in the Production context. See [Font Awesome setup](docs/FONTAWESOME.md).
 
 ## Validation
 
@@ -40,7 +40,7 @@ To test an upcoming release locally, replace the tarballs with `pnpm pack` outpu
 
 ## Deployment
 
-Netlify builds the `main` branch with `pnpm build:netlify` and publishes `dist`. Pull-request previews use free icons. Production requires `FONTAWESOME_PACKAGE_TOKEN` (Builds scope, Production context only, marked as a secret). Never add it to GitHub Actions, `.env` files in Git, `netlify.toml` or a `VITE_` variable.
+Netlify builds the `main` branch with `pnpm build:netlify` and publishes `dist`. Pull-request previews use free icons. Production requires `FONTAWESOME_PACKAGE_TOKEN` (Production context only, marked as a secret). Select only the Builds scope when the Netlify plan supports custom scopes; the current Free plan keeps all scopes enabled. This site is static and has no Functions or runtime code that needs the token. Never add it to GitHub Actions, `.env` files in Git, `netlify.toml` or a `VITE_` variable.
 
 The site is prepared for `globiojs.dev`; attach the domain in Netlify after purchasing it and configuring DNS.
 

@@ -15,9 +15,12 @@ or browser assets. The rendered icons are, naturally, visible on the website.
 3. Name it **`FONTAWESOME_PACKAGE_TOKEN`**.
 4. Paste the **Package Token** from your Font Awesome account. This is not a Kit
    ID, Kit URL or Font Awesome API token.
-5. Mark the value as secret/sensitive, give it only the **Builds** scope, and set
-   its value only for the **Production** deploy context. Leave Deploy Previews,
-   branch deploys and Preview Servers without a value.
+5. Mark the value as secret/sensitive and set its value only for the
+   **Production** deploy context. Leave local development, Deploy Previews,
+   branch deploys and Preview Servers without a value. Select only the **Builds**
+   scope when your plan supports custom scopes. The current Free plan does not,
+   so all scopes remain enabled; the Production context restriction still applies.
+   This static site has no Functions or runtime code that needs the token.
 6. For untrusted deploys, select **Deploy without sensitive variables** in the
    site's sensitive-variable policy.
 7. Run a production deploy after saving the variable.

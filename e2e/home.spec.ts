@@ -38,6 +38,10 @@ test('all five data modes update one globe with accessible keyboard controls', a
   await observeBrowser(page);
   await page.goto('/');
   await expectHeroReady(page);
+  // Keep testing animated routes below while avoiding two concurrent animated
+  // globes on software GPUs. Exercise the same pause control a visitor uses.
+  await page.getByRole('button', { name: 'Pause globe animation', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Play globe animation', exact: true })).toHaveAttribute('aria-pressed', 'true');
   const section = page.locator('#data');
   await section.scrollIntoViewIfNeeded();
   await expect(section.getByText('Live example', { exact: true })).toBeVisible({ timeout: 60_000 });
