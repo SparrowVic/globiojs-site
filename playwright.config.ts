@@ -15,7 +15,10 @@ export default defineConfig({
   reporter: [['list'], ['html', { outputFolder: './output/playwright/report', open: 'never' }]],
   use: {
     baseURL: `http://127.0.0.1:${port}`,
-    actionTimeout: 15_000,
+    // Linux CI uses SwiftShader: trace shows ~1.4 s per browser round trip,
+    // so normal visibility/stability/hit checks can consume 15 s before
+    // a click is dispatched. Allow that infrastructure cost in CI only.
+    actionTimeout: process.env.CI ? 45_000 : 15_000,
     navigationTimeout: 45_000,
     // Preserve DOM/action diagnostics without continuously copying large WebGL
     // frames from SwiftShader. Failure screenshots are still captured below.
