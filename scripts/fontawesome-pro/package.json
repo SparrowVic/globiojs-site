@@ -1,0 +1,9 @@
+{
+  "name": "globiojs-site-pro-icons",
+  "private": true,
+  "version": "0.0.0",
+  "dependencies": {
+    "@fortawesome/sharp-duotone-solid-svg-icons": "7.2.0",
+    "@fortawesome/sharp-solid-svg-icons": "7.2.0"
+  }
+}

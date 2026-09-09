@@ -1,0 +1,15 @@
+node_modules/
+dist/
+output/
+playwright-report/
+test-results/
+.netlify/
+.env
+.env.*
+!.env.example
+.npmrc
+.fontawesome-pro/
+*.log
+*.tsbuildinfo
+.DS_Store
+vendor/unpacked/
