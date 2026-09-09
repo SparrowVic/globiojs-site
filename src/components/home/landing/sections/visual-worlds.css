@@ -1,151 +1,148 @@
 .home-worlds {
-  padding-block: clamp(72px, 8vw, 112px);
-  color: #dcebff;
-  background: #050608;
+  position: relative;
+  padding-block: clamp(88px, 9vw, 144px);
+  color: var(--ice);
+  background: transparent;
   scroll-margin-top: 100px;
 }
 
 .home-worlds__intro {
   display: grid;
-  grid-template-columns: minmax(0, 1.65fr) minmax(0, 0.7fr);
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.7fr);
   align-items: end;
   gap: clamp(32px, 5vw, 80px);
-  margin-bottom: clamp(36px, 5vw, 64px);
+  margin-bottom: 20px;
 }
 
 .home-worlds__intro h2 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(48px, 6.8vw, 96px);
-  font-weight: 570;
-  line-height: 1.01;
+  font-size: clamp(48px, 6.4vw, 88px);
+  font-weight: 560;
+  line-height: 1.06;
   letter-spacing: -0.04em;
   text-wrap: balance;
 }
 
-.home-worlds__intro h2 > span {
-  color: #ff8a4c;
-}
+.home-worlds__intro h2 > span { color: var(--ember); }
 
 .home-worlds__intro > p {
-  max-width: 30ch;
+  max-width: 32ch;
   margin: 0 0 6px;
-  color: #a4adba;
+  color: var(--mist);
   font-size: 18px;
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
-.home-worlds__study {
-  min-width: 0;
+.home-worlds__study { min-width: 0; }
+
+/* The artwork supplies its alpha. Neither an opaque tile nor a circle mask
+   sits between the globe's atmosphere and the page's continuous background. */
+.home-worlds__art {
+  position: relative;
+  aspect-ratio: 1;
+  background: transparent;
 }
 
-.home-worlds__study-link {
+.home-worlds__art-link {
+  position: absolute;
+  inset: 0;
   display: block;
   color: inherit;
   text-decoration: none;
 }
 
-.home-worlds__art {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 1;
-  background: #050608;
-}
-
-.home-worlds__art img {
-  display: block;
+.home-worlds__poster,
+.home-worlds__canvas {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: contain;
 }
+
+.home-worlds__poster {
+  display: block;
+  object-fit: contain;
+  opacity: 1;
+  transition: opacity 280ms ease;
+}
+
+.home-worlds__poster.is-hidden { opacity: 0; }
+.home-worlds__canvas { opacity: 0; }
+.home-worlds__canvas.is-live { opacity: 1; }
 
 .home-worlds__image-action {
   position: absolute;
-  inset: auto 20px 20px auto;
+  inset: auto 9% 9% auto;
   display: inline-flex;
   align-items: center;
-  gap: 24px;
+  gap: 18px;
   min-height: 44px;
-  padding: 10px 14px;
-  background: #101419;
-  color: #dcebff;
-  font-size: 16px;
+  color: var(--ice);
+  font-size: 15px;
   line-height: 1.4;
   opacity: 0;
   transition: opacity 180ms ease;
 }
 
-.home-worlds__study-link:hover .home-worlds__image-action,
-.home-worlds__study-link:focus-visible .home-worlds__image-action {
-  opacity: 1;
-}
+.home-worlds__image-action > span { color: var(--ember); }
+.home-worlds__art-link:hover .home-worlds__image-action,
+.home-worlds__art-link:focus-visible .home-worlds__image-action { opacity: 1; }
 
-.home-worlds__study-link:focus-visible {
-  outline: 2px solid #6fb4ff;
-  outline-offset: 8px;
-}
-
-.home-worlds__study-copy {
-  padding-top: 24px;
-}
+.home-worlds__study-copy { padding-top: 8px; }
 
 .home-worlds__study-title {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
   align-items: baseline;
-  gap: 8px 16px;
+  gap: 12px 20px;
 }
 
 .home-worlds__study-title h3 {
   margin: 0;
   font-family: var(--font-display);
-  font-size: clamp(32px, 3.5vw, 52px);
-  font-weight: 550;
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  font-size: clamp(36px, 4.2vw, 60px);
+  font-weight: 540;
+  line-height: 1.12;
+  letter-spacing: -0.035em;
 }
 
 .home-worlds__character {
-  color: #6fb4ff;
-  font-size: 16px;
-  line-height: 1.4;
+  color: var(--atm);
+  font-size: 15px;
+  line-height: 1.5;
 }
 
 .home-worlds__description {
   max-width: 48ch;
-  margin: 18px 0 0;
-  color: #a4adba;
+  margin: 20px 0 0;
+  color: var(--mist);
   font-size: 17px;
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
 .home-worlds__uses {
   max-width: 48ch;
   margin: 24px 0 0;
-  color: #dcebff;
-  font-size: 16px;
-  line-height: 1.6;
+  color: var(--ice);
+  font-size: 14px;
+  line-height: 1.75;
 }
 
 .home-worlds__study--featured {
-  margin-bottom: clamp(64px, 7vw, 96px);
-  border-block: 1px solid #303740;
-}
-
-.home-worlds__study--featured .home-worlds__study-link {
   display: grid;
   grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.4fr);
   gap: clamp(24px, 4vw, 64px);
   align-items: center;
+  margin-block: 24px clamp(64px, 7vw, 112px);
 }
 
 .home-worlds__study--featured .home-worlds__art {
   grid-column: 2;
   grid-row: 1;
-  width: 100%;
-  max-width: 640px;
-  justify-self: end;
+  width: 112%;
+  max-width: 800px;
+  justify-self: center;
 }
 
 .home-worlds__study--featured .home-worlds__study-copy {
@@ -154,70 +151,101 @@
   padding-block: 40px;
 }
 
-.home-worlds__study--featured h3 {
-  font-size: clamp(42px, 5vw, 72px);
-}
-
+.home-worlds__study--featured h3 { font-size: clamp(48px, 5.5vw, 76px); }
 .home-worlds__study--featured .home-worlds__character,
-.home-worlds__study--paper .home-worlds__character {
-  color: #ff8a4c;
-}
+.home-worlds__study--paper .home-worlds__character { color: var(--ember); }
 
 .home-worlds__features {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   margin: 28px 0 0;
-  padding-left: 20px;
-  color: #dcebff;
-  font-size: 16px;
-  line-height: 1.55;
-  list-style: disc;
+  padding: 0;
+  color: var(--ice);
+  font-size: 15px;
+  line-height: 1.6;
+  list-style: none;
 }
 
-.home-worlds__features li::marker {
-  color: #ff8a4c;
-}
+.home-worlds__features li { display: flex; gap: 14px; align-items: baseline; }
+.home-worlds__features li::before { content: '—'; color: var(--ember); }
 
 .home-worlds__signals {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.9fr);
+  grid-template-columns: minmax(0, 1.16fr) minmax(0, 0.88fr);
   align-items: start;
-  gap: clamp(40px, 7vw, 112px);
-  margin-bottom: clamp(64px, 7vw, 96px);
+  gap: clamp(48px, 8vw, 128px);
+  margin-bottom: clamp(88px, 10vw, 152px);
 }
 
-.home-worlds__study--dotted .home-worlds__art {
-  aspect-ratio: 1.08;
-}
-
-.home-worlds__study--hologram {
-  padding-top: clamp(48px, 6vw, 88px);
-}
+.home-worlds__study--dotted .home-worlds__art { margin-top: -32px; }
+.home-worlds__study--hologram { padding-top: clamp(72px, 9vw, 136px); }
 
 .home-worlds__perspectives {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 0.9fr);
+  grid-template-columns: minmax(0, 1.14fr) minmax(0, 1fr) minmax(0, 0.96fr);
   align-items: start;
-  gap: clamp(24px, 3.4vw, 56px);
+  gap: clamp(24px, 3.5vw, 56px);
 }
 
-.home-worlds__study--outline {
-  padding-top: 48px;
+.home-worlds__study--outline { padding-top: 56px; }
+.home-worlds__study--wireframe { padding-top: 112px; }
+.home-worlds__perspectives .home-worlds__study-title h3 { font-size: clamp(30px, 3vw, 44px); }
+.home-worlds__perspectives .home-worlds__study-title { gap: 8px 14px; }
+.home-worlds__perspectives .home-worlds__description { font-size: 16px; }
+
+.home-worlds__actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  column-gap: 24px;
+  row-gap: 4px;
+  margin-top: 22px;
 }
 
-.home-worlds__study--wireframe {
-  padding-top: 96px;
+.home-worlds__motion,
+.home-worlds__studio,
+.home-worlds__details > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding-block: 8px;
+  color: var(--ice);
+  font-size: 14px;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: color 160ms ease;
 }
 
-.home-worlds__perspectives .home-worlds__study-title h3 {
-  font-size: clamp(30px, 3vw, 44px);
+.home-worlds__motion {
+  padding-inline: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  text-align: left;
 }
 
-.home-worlds__perspectives .home-worlds__study-title {
-  align-items: start;
-  flex-direction: column;
+.home-worlds__play-icon { width: 18px; font-size: 22px; color: var(--atm); line-height: 1; }
+.home-worlds__motion[aria-pressed='true'] .home-worlds__play-icon { color: var(--ember); }
+.home-worlds__motion:hover:not(:disabled),
+.home-worlds__studio:hover,
+.home-worlds__details > a:hover { color: var(--ember); }
+.home-worlds__motion:disabled { color: var(--mist); opacity: .7; cursor: default; }
+.home-worlds__motion:disabled .home-worlds__play-icon { color: inherit; }
+.home-worlds__studio > span { color: var(--ember); }
+
+.home-worlds__details {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 20px;
 }
+
+.home-worlds__details > a { color: var(--mist); }
+.home-worlds__details > p { margin: 0; color: var(--mist); font-size: 13px; line-height: 1.6; }
+.home-worlds__details > p:empty { display: none; }
 
 .home-worlds__next {
   display: flex;
@@ -225,9 +253,9 @@
   justify-content: space-between;
   align-items: center;
   gap: 28px;
-  margin-top: clamp(48px, 6vw, 80px);
+  margin-top: clamp(64px, 8vw, 112px);
   padding-top: 40px;
-  border-top: 1px solid #303740;
+  border-top: 1px solid var(--hair);
 }
 
 .home-worlds__next > p {
@@ -235,145 +263,69 @@
   font-family: var(--font-display);
   font-size: clamp(28px, 3vw, 40px);
   font-weight: 480;
-  line-height: 1.25;
+  line-height: 1.3;
   letter-spacing: -0.025em;
-  color: #a4adba;
+  color: var(--mist);
 }
 
-.home-worlds__next strong {
-  color: #dcebff;
-  font-weight: inherit;
-}
-
-.home-worlds__next > a {
-  font-size: 16px;
-}
+.home-worlds__next strong { color: var(--ice); font-weight: inherit; }
+.home-worlds__next > a { font-size: 16px; }
+.home-worlds__motion-preference { margin: 24px 0 0; color: var(--mist); font-size: 14px; line-height: 1.6; }
+.home-worlds__rail-hint { display: none; }
 
 @media (max-width: 1000px) {
-  .home-worlds__intro {
-    grid-template-columns: 1fr;
-    gap: 28px;
-  }
-
-  .home-worlds__intro h2 {
-    max-width: 15ch;
-  }
-
-  .home-worlds__intro > p {
-    max-width: 52ch;
-  }
-
-  .home-worlds__study--featured .home-worlds__study-link {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-  }
-
-  .home-worlds__study--featured .home-worlds__study-title {
-    align-items: start;
-    flex-direction: column;
-  }
-
-  .home-worlds__perspectives {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .home-worlds__study--outline {
-    padding-top: 48px;
-  }
-
-  .home-worlds__study--wireframe {
-    padding-top: 96px;
-  }
+  .home-worlds__intro { grid-template-columns: 1fr; gap: 24px; }
+  .home-worlds__intro h2 { max-width: 16ch; }
+  .home-worlds__intro > p { max-width: 52ch; }
+  .home-worlds__study--featured { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; }
+  .home-worlds__study--featured .home-worlds__art { width: 115%; }
+  .home-worlds__study--featured .home-worlds__study-title { align-items: start; flex-direction: column; }
+  .home-worlds__signals { gap: 48px; }
+  .home-worlds__perspectives { gap: 28px; }
+  .home-worlds__perspectives .home-worlds__study-title { flex-direction: column; gap: 6px; }
+  .home-worlds__actions { column-gap: 18px; }
 }
 
 @media (max-width: 700px) {
-  .home-worlds__study--featured .home-worlds__study-link,
-  .home-worlds__signals,
-  .home-worlds__perspectives {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
+  .home-worlds { padding-block: 72px; }
+  .home-worlds__intro { margin-bottom: 28px; }
+  .home-worlds__intro h2 { font-size: clamp(40px, 8.8vw, 60px); }
+  .home-worlds__intro > p { font-size: 16px; }
+  .home-worlds__study--featured,
+  .home-worlds__signals { grid-template-columns: minmax(0, 1fr); }
+  .home-worlds__study--featured { gap: 0; margin-block: 0 64px; }
   .home-worlds__study--featured .home-worlds__art,
-  .home-worlds__study--featured .home-worlds__study-copy {
-    grid-column: 1;
-    grid-row: auto;
-  }
-
-  .home-worlds__study--featured .home-worlds__study-link {
-    gap: 0;
-  }
-
-  .home-worlds__study--featured .home-worlds__study-copy {
-    padding-top: 20px;
-  }
-
-  .home-worlds__study--featured .home-worlds__study-title,
-  .home-worlds__perspectives .home-worlds__study-title {
-    flex-direction: row;
-    align-items: baseline;
-  }
-
-  .home-worlds__signals,
-  .home-worlds__perspectives {
-    gap: 64px;
-  }
-
+  .home-worlds__study--featured .home-worlds__study-copy { grid-column: 1; grid-row: auto; }
+  .home-worlds__study--featured .home-worlds__art { width: 100%; }
+  .home-worlds__study--featured .home-worlds__study-copy { padding-block: 0; }
+  .home-worlds__study--featured .home-worlds__study-title { flex-direction: row; align-items: baseline; }
+  .home-worlds__study--featured h3 { font-size: 44px; }
+  .home-worlds__art { max-width: 460px; width: 100%; margin-inline: auto; }
+  .home-worlds__study--dotted .home-worlds__art { margin-top: 0; }
   .home-worlds__study--hologram,
   .home-worlds__study--outline,
-  .home-worlds__study--wireframe {
-    padding-top: 0;
-  }
-
-  .home-worlds__art {
-    max-width: 512px;
-    margin-inline: auto;
-  }
-
-  .home-worlds__image-action {
-    inset: auto 12px 12px auto;
-    opacity: 1;
-    font-size: 16px;
-  }
-
-  .home-worlds__study-copy {
-    padding-top: 20px;
-  }
-
-  .home-worlds__perspectives .home-worlds__study-title h3 {
-    font-size: 36px;
-  }
-
-  .home-worlds__next {
-    align-items: start;
-    flex-direction: column;
-  }
+  .home-worlds__study--wireframe { padding-top: 0; }
+  .home-worlds__signals { gap: 64px; margin-bottom: 64px; }
+  .home-worlds__study-copy { padding-top: 0; }
+  .home-worlds__study-title h3 { font-size: 40px; }
+  .home-worlds__description { font-size: 16px; line-height: 1.75; margin-top: 16px; }
+  .home-worlds__uses { margin-top: 20px; }
+  .home-worlds__image-action { inset: auto 6% 8% auto; opacity: 1; font-size: 14px; }
+  .home-worlds__rail-hint { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; font-size: 14px; margin-bottom: 20px; }
+  .home-worlds__rail-hint > span { color: var(--mist); }
+  .home-worlds__perspectives { display: flex; gap: 28px; overflow-x: auto; scroll-snap-type: x proximity; padding: 4px 5px 22px; margin-inline: -5px; scrollbar-width: thin; scrollbar-color: var(--ember) var(--hair); }
+  .home-worlds__perspectives .home-worlds__study { flex: 0 0 86%; min-width: 0; scroll-snap-align: start; }
+  .home-worlds__perspectives .home-worlds__study-title { flex-direction: row; align-items: baseline; gap: 8px 14px; }
+  .home-worlds__perspectives .home-worlds__study-title h3 { font-size: 34px; }
+  .home-worlds__next { align-items: start; flex-direction: column; margin-top: 48px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .home-worlds__image-action {
-    transition: none;
-  }
-}
-
-@media (hover: none) {
-  .home-worlds__image-action {
-    opacity: 1;
-  }
-}
-
-.home-worlds__rail-hint { display:none; }
-@media (max-width:700px) {
- .home-worlds__intro h2 { font-size:clamp(40px,8.8vw,60px); }
- .home-worlds__intro > p { font-size:16px; }
- .home-worlds__description { font-size:16px; }
- .home-worlds__art { max-width:420px; }
- .home-worlds__study--featured .home-worlds__art { max-width:420px; justify-self:center; }
- .home-worlds__signals { gap:48px; }
- .home-worlds__rail-hint { display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px; font-size:14px; margin-bottom:24px; }
- .home-worlds__rail-hint > span { color:var(--mist); }
- .home-worlds__perspectives { display:flex; align-items:stretch; gap:24px; overflow-x:auto; scroll-snap-type:x proximity; padding:8px 4px 22px; margin-inline:-4px; scrollbar-width:thin; scrollbar-color:var(--ember) var(--hair); }
- .home-worlds__perspectives .home-worlds__study { flex:0 0 86%; min-width:0; scroll-snap-align:start; }
- .home-worlds__perspectives .home-worlds__study-title { flex-direction:column; gap:6px; }
- .home-worlds__perspectives .home-worlds__image-action { font-size:14px; min-height:40px; padding:8px 10px; }
- .home-worlds__perspectives .home-worlds__description { font-size:15px; }
- .home-worlds__perspectives .home-worlds__uses { font-size:14px; }
+  .home-worlds__poster,
+  .home-worlds__canvas,
+  .home-worlds__image-action,
+  .home-worlds__motion,
+  .home-worlds__studio,
+  .home-worlds__details > a { transition: none !important; }
+  .home-worlds__perspectives { scroll-behavior: auto; }
 }

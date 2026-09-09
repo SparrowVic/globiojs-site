@@ -2,8 +2,10 @@ import { useEffect, useRef } from 'react';
 import type {
   ArcConfig,
   CinematicConfig,
+  GlobeConfig,
   GlobeInstance,
   GlobeKind,
+  PostProcessingConfig,
   ResolutionLevel,
   StarfieldConfig,
   ThemePresetName,
@@ -51,6 +53,10 @@ export interface DecorationGlobeProps {
   /** Show the soft rim atmosphere. Default true. */
   readonly atmosphere?: boolean;
   readonly cinematic?: CinematicConfig;
+  /** Optional post effects; omit to preserve the selected kind's defaults. */
+  readonly postprocessing?: PostProcessingConfig;
+  /** Shared visual scene; host, animation pacing and performance stay managed here. */
+  readonly scene?: Omit<GlobeConfig, 'container' | 'autoRotate' | 'performance'>;
   /**
    * Reserve a fraction of the viewport as margin around the globe so the
    * atmosphere halo has room to fade. 0..0.5. Default 0.18 — chosen for
@@ -135,6 +141,8 @@ export function DecorationGlobe({
   arcs,
   atmosphere = true,
   cinematic,
+  postprocessing,
+  scene,
   framingPadding = 0.18,
   lockZoom = true,
   transparent = true,
@@ -191,24 +199,27 @@ export function DecorationGlobe({
 
     void loadGlobeRuntime().then(({ createGlobe }) => {
       if (cancelled) return;
+      const resolvedKind = scene?.kind ?? kind;
       globe = createGlobe({
-        container,
         kind,
         theme,
         transparent,
         framing: { padding: framingPadding, lockZoom },
         countries: { hoverEnabled: interactive, ...(resolution !== undefined && { resolution }) },
-        autoRotate: { enabled: true, speed },
         atmosphere: { enabled: atmosphere },
         starfield: resolvedStarfield,
         ...(arcs !== undefined && { arcs }),
         ...(cinematic !== undefined && { cinematic }),
+        ...(postprocessing !== undefined && { postprocessing }),
         focusPulse: { enabled: false },
         axisTilt,
         initialPosition: [initialLat, initialLng],
+        ...scene,
+        container,
+        autoRotate: { enabled: true, speed },
         performance: {
           // Cinematic already anti-aliases inside its post pipeline.
-          antialias: kind !== 'cinematic',
+          antialias: resolvedKind !== 'cinematic',
           adaptiveQuality: true,
           // Slow ambient rotation needs fewer frames than an interactive globe.
           maxFps: maxFps ?? (interactive ? 60 : 30),
@@ -253,6 +264,8 @@ export function DecorationGlobe({
     arcs,
     atmosphere,
     cinematic,
+    postprocessing,
+    scene,
     framingPadding,
     lockZoom,
     transparent,
