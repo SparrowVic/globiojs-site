@@ -30,6 +30,10 @@ pnpm test:e2e
 
 GitHub Actions runs these checks with public dependencies and without Font Awesome secrets.
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for branch names, commit authorship, local checks and owner approval requirements.
+
 ## Library versions
 
 The site installs the published `@globiojs/core`, `@globiojs/react`, `@globiojs/vue` and `@globiojs/angular` packages from npm, pinned to version `0.1.0`. The lockfile records their registry integrity hashes. Package source and release history live in [SparrowVic/globiojs](https://github.com/SparrowVic/globiojs); local bootstrap archives are no longer needed.
