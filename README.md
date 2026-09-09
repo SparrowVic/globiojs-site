@@ -32,11 +32,11 @@ GitHub Actions runs these checks with public dependencies and without Font Aweso
 
 ## Library versions
 
-Until the first npm publication, `vendor/` contains actual package tarballs built from the GlobioJS library repository, with provenance in `vendor/README.md`. They contain the same public code and declarations that are prepared for npm; the website never imports library source files from another checkout.
+The site installs the published `@globiojs/core`, `@globiojs/react`, `@globiojs/vue` and `@globiojs/angular` packages from npm, pinned to version `0.1.0`. The lockfile records their registry integrity hashes. Package source and release history live in [SparrowVic/globiojs](https://github.com/SparrowVic/globiojs); local bootstrap archives are no longer needed.
 
-After publication, replace the four `file:vendor/...` dependencies with the released versions, update the lockfile and run `pnpm docs:extract`. Wrapper packages are development dependencies used to typecheck documented examples. The runtime only needs `@globiojs/core` and Three.js.
+Wrapper packages are development dependencies used to typecheck documented examples. The runtime only needs `@globiojs/core` and Three.js. The website never imports library source files from another checkout.
 
-To test an upcoming release locally, replace the tarballs with `pnpm pack` output from the library repository, reinstall and run `pnpm docs:extract`. Keep the tarball versions consistent across core and wrappers.
+When upgrading GlobioJS, update all four exact versions together, refresh the lockfile and run `pnpm docs:extract` to synchronize API metadata from the installed core package. Then run the validation commands above before deploying.
 
 ## Deployment
 

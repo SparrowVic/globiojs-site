@@ -12,4 +12,3 @@ test-results/
 *.log
 *.tsbuildinfo
 .DS_Store
-vendor/unpacked/

@@ -25,8 +25,8 @@ dependencies:
     specifier: ^3.3.1
     version: 3.5.0(@fortawesome/fontawesome-svg-core@7.2.0)(react@18.3.1)
   '@globiojs/core':
-    specifier: file:vendor/globiojs-core-0.1.0.tgz
-    version: file:vendor/globiojs-core-0.1.0.tgz(three@0.167.1)
+    specifier: 0.1.0
+    version: 0.1.0(three@0.167.1)
   class-variance-authority:
     specifier: ^0.7.1
     version: 0.7.1
@@ -72,14 +72,14 @@ devDependencies:
     specifier: ~17.3.12
     version: 17.3.12(rxjs@7.8.2)(zone.js@0.14.10)
   '@globiojs/angular':
-    specifier: file:vendor/globiojs-angular-0.1.0.tgz
-    version: file:vendor/globiojs-angular-0.1.0.tgz(@angular/common@17.3.12)(@angular/core@17.3.12)(@globiojs/core@0.1.0)
+    specifier: 0.1.0
+    version: 0.1.0(@angular/common@17.3.12)(@angular/core@17.3.12)(@globiojs/core@0.1.0)
   '@globiojs/react':
-    specifier: file:vendor/globiojs-react-0.1.0.tgz
-    version: file:vendor/globiojs-react-0.1.0.tgz(@globiojs/core@0.1.0)(react@18.3.1)(three@0.167.1)
+    specifier: 0.1.0
+    version: 0.1.0(@globiojs/core@0.1.0)(react@18.3.1)(three@0.167.1)
   '@globiojs/vue':
-    specifier: file:vendor/globiojs-vue-0.1.0.tgz
-    version: file:vendor/globiojs-vue-0.1.0.tgz(@globiojs/core@0.1.0)(three@0.167.1)(vue@3.5.42)
+    specifier: 0.1.0
+    version: 0.1.0(@globiojs/core@0.1.0)(three@0.167.1)(vue@3.5.42)
   '@playwright/test':
     specifier: 1.58.2
     version: 1.58.2
@@ -737,6 +737,54 @@ packages:
       '@fortawesome/fontawesome-svg-core': 7.2.0
       react: 18.3.1
     dev: false
+
+  /@globiojs/angular@0.1.0(@angular/common@17.3.12)(@angular/core@17.3.12)(@globiojs/core@0.1.0):
+    resolution: {integrity: sha512-krrLhxF3OrGmNCjWwujMOYRb0E3pD1SSHJW56z1hm/xVursBm9tMPufNTgmhLdtuBpoaJLzaOEA9ZKlDik0Y2g==}
+    peerDependencies:
+      '@angular/common': '>=17.0.0 <23.0.0'
+      '@angular/core': '>=17.0.0 <23.0.0'
+      '@globiojs/core': ^0.1.0
+    dependencies:
+      '@angular/common': 17.3.12(@angular/core@17.3.12)(rxjs@7.8.2)
+      '@angular/core': 17.3.12(rxjs@7.8.2)(zone.js@0.14.10)
+      '@globiojs/core': 0.1.0(three@0.167.1)
+      tslib: 2.8.1
+    dev: true
+
+  /@globiojs/core@0.1.0(three@0.167.1):
+    resolution: {integrity: sha512-sJnHe6NEwVEd2LjGSvPoO+Bqcl7wTMKapk0Bwj/dp/RRR1gHizkJ7WNQpLj7/ViLAlaI70CUjA1H7fFAKC0xaQ==}
+    peerDependencies:
+      three: 0.167.1
+    dependencies:
+      d3-geo: 3.1.1
+      earcut: 2.2.4
+      three: 0.167.1
+      three-mesh-bvh: 0.7.6(three@0.167.1)
+      topojson-client: 3.1.0
+
+  /@globiojs/react@0.1.0(@globiojs/core@0.1.0)(react@18.3.1)(three@0.167.1):
+    resolution: {integrity: sha512-KW2WSCKLssoqBJABgg7M3wdJ9R6Y8hxeAm8q0sOkuQdB1r1Kxq6j72XElcwrLAsgyJjvdVgpaIcEZTXqjiSVHQ==}
+    peerDependencies:
+      '@globiojs/core': ^0.1.0
+      react: '>=18.0.0'
+      three: 0.167.1
+    dependencies:
+      '@globiojs/core': 0.1.0(three@0.167.1)
+      react: 18.3.1
+      three: 0.167.1
+    dev: true
+
+  /@globiojs/vue@0.1.0(@globiojs/core@0.1.0)(three@0.167.1)(vue@3.5.42):
+    resolution: {integrity: sha512-8gtUn48cT1PplDBxlm/EtzrDTuwRjc+KZoeHbdmMFUQLWdqgFnMdPq9Adsy61IbiPNxoqpUOaZgNbV6nosCDsA==}
+    peerDependencies:
+      '@globiojs/core': ^0.1.0
+      three: 0.167.1
+      vue: '>=3.3.0'
+    dependencies:
+      '@globiojs/core': 0.1.0(three@0.167.1)
+      three: 0.167.1
+      vue: 3.5.42(typescript@5.9.3)
+    dev: true
 
   /@hono/node-server@2.1.1(hono@4.13.7):
     resolution: {integrity: sha512-ELuehkj5VCBdgEw9zs+ivkKwyzzUCSQuE96YmiPvn1ECBoZCczbFXJLeEGMTYjphP6gydh4pHMqEYPVMYUVgQg==}
@@ -5506,64 +5554,4 @@ packages:
 
   /zone.js@0.14.10:
     resolution: {integrity: sha512-YGAhaO7J5ywOXW6InXNlLmfU194F8lVgu7bRntUF3TiG8Y3nBK0x1UJJuHUP/e8IyihkjCYqhCScpSwnlaSRkQ==}
-    dev: true
-
-  file:vendor/globiojs-angular-0.1.0.tgz(@angular/common@17.3.12)(@angular/core@17.3.12)(@globiojs/core@0.1.0):
-    resolution: {integrity: sha512-krrLhxF3OrGmNCjWwujMOYRb0E3pD1SSHJW56z1hm/xVursBm9tMPufNTgmhLdtuBpoaJLzaOEA9ZKlDik0Y2g==, tarball: file:vendor/globiojs-angular-0.1.0.tgz}
-    id: file:vendor/globiojs-angular-0.1.0.tgz
-    name: '@globiojs/angular'
-    version: 0.1.0
-    peerDependencies:
-      '@angular/common': '>=17.0.0 <23.0.0'
-      '@angular/core': '>=17.0.0 <23.0.0'
-      '@globiojs/core': ^0.1.0
-    dependencies:
-      '@angular/common': 17.3.12(@angular/core@17.3.12)(rxjs@7.8.2)
-      '@angular/core': 17.3.12(rxjs@7.8.2)(zone.js@0.14.10)
-      '@globiojs/core': file:vendor/globiojs-core-0.1.0.tgz(three@0.167.1)
-      tslib: 2.8.1
-    dev: true
-
-  file:vendor/globiojs-core-0.1.0.tgz(three@0.167.1):
-    resolution: {integrity: sha512-sJnHe6NEwVEd2LjGSvPoO+Bqcl7wTMKapk0Bwj/dp/RRR1gHizkJ7WNQpLj7/ViLAlaI70CUjA1H7fFAKC0xaQ==, tarball: file:vendor/globiojs-core-0.1.0.tgz}
-    id: file:vendor/globiojs-core-0.1.0.tgz
-    name: '@globiojs/core'
-    version: 0.1.0
-    peerDependencies:
-      three: 0.167.1
-    dependencies:
-      d3-geo: 3.1.1
-      earcut: 2.2.4
-      three: 0.167.1
-      three-mesh-bvh: 0.7.6(three@0.167.1)
-      topojson-client: 3.1.0
-
-  file:vendor/globiojs-react-0.1.0.tgz(@globiojs/core@0.1.0)(react@18.3.1)(three@0.167.1):
-    resolution: {integrity: sha512-KW2WSCKLssoqBJABgg7M3wdJ9R6Y8hxeAm8q0sOkuQdB1r1Kxq6j72XElcwrLAsgyJjvdVgpaIcEZTXqjiSVHQ==, tarball: file:vendor/globiojs-react-0.1.0.tgz}
-    id: file:vendor/globiojs-react-0.1.0.tgz
-    name: '@globiojs/react'
-    version: 0.1.0
-    peerDependencies:
-      '@globiojs/core': ^0.1.0
-      react: '>=18.0.0'
-      three: 0.167.1
-    dependencies:
-      '@globiojs/core': file:vendor/globiojs-core-0.1.0.tgz(three@0.167.1)
-      react: 18.3.1
-      three: 0.167.1
-    dev: true
-
-  file:vendor/globiojs-vue-0.1.0.tgz(@globiojs/core@0.1.0)(three@0.167.1)(vue@3.5.42):
-    resolution: {integrity: sha512-8gtUn48cT1PplDBxlm/EtzrDTuwRjc+KZoeHbdmMFUQLWdqgFnMdPq9Adsy61IbiPNxoqpUOaZgNbV6nosCDsA==, tarball: file:vendor/globiojs-vue-0.1.0.tgz}
-    id: file:vendor/globiojs-vue-0.1.0.tgz
-    name: '@globiojs/vue'
-    version: 0.1.0
-    peerDependencies:
-      '@globiojs/core': ^0.1.0
-      three: 0.167.1
-      vue: '>=3.3.0'
-    dependencies:
-      '@globiojs/core': file:vendor/globiojs-core-0.1.0.tgz(three@0.167.1)
-      three: 0.167.1
-      vue: 3.5.42(typescript@5.9.3)
     dev: true
