@@ -23,12 +23,33 @@ test('six live styles and themes release old WebGL contexts, and PNG export is v
   const downloadEvent = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Save PNG', exact: true }).click();
   const download = await downloadEvent;
-  expect(download.suggestedFilename()).toBe('globio-cinematic.png');
+  expect(download.suggestedFilename()).toBe('globiojs-cinematic.png');
   const png = await readFile((await download.path())!);
   expect([...png.subarray(0, 8)]).toEqual([137, 80, 78, 71, 13, 10, 26, 10]);
   expect(png.readUInt32BE(16)).toBe(1200);
   expect(png.readUInt32BE(20)).toBe(1000);
   await expect(page.getByText('Your PNG is ready.', { exact: true })).toBeVisible();
+  const alphaOf = async (image: Buffer) => page.evaluate(async (data) => {
+    const source = new Image(); source.src = `data:image/png;base64,${data}`; await source.decode();
+    const canvas = document.createElement('canvas'); canvas.width = source.width; canvas.height = source.height;
+    const context = canvas.getContext('2d')!; context.drawImage(source, 0, 0);
+    return [context.getImageData(0, 0, 1, 1).data[3], context.getImageData(600, 500, 1, 1).data[3]];
+  }, image.toString('base64'));
+  expect((await alphaOf(png))[0]).toBe(255);
+  await page.getByLabel('PNG background', { exact: true }).selectOption('transparent');
+  const transparentDownloadEvent = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Save PNG', exact: true }).click();
+  const transparentDownload = await transparentDownloadEvent;
+  expect(transparentDownload.suggestedFilename()).toBe('globiojs-cinematic-transparent.png');
+  const transparentPng = await readFile((await transparentDownload.path())!);
+  expect(transparentPng.readUInt32BE(16)).toBe(1200);
+  expect(transparentPng.readUInt32BE(20)).toBe(1000);
+  expect(await alphaOf(transparentPng)).toEqual([0, 255]);
+  for (const mode of ['stars', 'clear', 'nebula']) {
+    await page.getByLabel('Page backdrop', { exact: true }).selectOption(mode);
+    await expect(page.locator('.home-atmosphere')).toHaveAttribute('data-backdrop', mode);
+    expect((await contextCounts(page)).live).toBe(1);
+  }
   expect(errors).toEqual([]);
 });
 
@@ -98,5 +119,70 @@ test('without WebGL, posters and documentation remain usable and retry is safe',
   await expect(page.getByText('The live preview could not start.', { exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'Try preview again', exact: true }).click();
   await expect(page.getByText('The live preview could not start.', { exact: true })).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
+test('cinematic shot and camera controls update one paused WebGL canvas', async ({ page }) => {
+  await page.setViewportSize({ width: 1265, height: 720 });
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await observeBrowser(page);
+  await page.goto('/');
+  await expectHeroReady(page);
+
+  await page.getByRole('button', { name: 'Pause globe animation', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Play globe animation', exact: true })).toHaveAttribute('aria-pressed', 'true');
+
+  const initialContexts = await contextCounts(page);
+  expect(initialContexts.live).toBe(1);
+  const shots = page.getByRole('group', { name: 'Cinematic scene', exact: true });
+  const shotNames = ['Earthrise', 'Nightfall', 'Aurora'] as const;
+  const expectSelectedShot = async (selected: typeof shotNames[number]) => {
+    for (const name of shotNames) {
+      await expect(shots.getByRole('button', { name, exact: true })).toHaveAttribute(
+        'aria-pressed',
+        name === selected ? 'true' : 'false',
+      );
+    }
+  };
+
+  await expectSelectedShot('Earthrise');
+  for (const name of ['Nightfall', 'Aurora', 'Earthrise'] as const) {
+    await shots.getByRole('button', { name, exact: true }).click();
+    await expectSelectedShot(name);
+  }
+  // Selecting the current shot is intentionally a no-op and must preserve its state.
+  await shots.getByRole('button', { name: 'Earthrise', exact: true }).click();
+  await expectSelectedShot('Earthrise');
+  expect((await contextCounts(page)).created).toBe(initialContexts.created);
+
+  const canvas = page.locator('.home-globe-canvas canvas');
+  const beforePacific = await canvas.screenshot();
+  const cameras = page.getByRole('group', { name: 'Camera view', exact: true });
+  const pacific = cameras.getByRole('button', { name: 'Pacific', exact: true });
+  await pacific.click();
+  await expect(pacific).toHaveAttribute('aria-pressed', 'true');
+  await expect(cameras.getByRole('button', { name: 'Atlantic', exact: true })).toHaveAttribute('aria-pressed', 'false');
+  await expect(cameras.getByRole('button', { name: 'Polar', exact: true })).toHaveAttribute('aria-pressed', 'false');
+  await expect.poll(async () => (await canvas.screenshot()).equals(beforePacific)).toBe(false);
+
+  // Re-selecting Pacific redraws in place and keeps the same exclusive selection.
+  await pacific.click();
+  await expect(pacific).toHaveAttribute('aria-pressed', 'true');
+  const finalContexts = await contextCounts(page);
+  expect(finalContexts.created).toBe(initialContexts.created);
+  expect(finalContexts.live).toBe(1);
+  expect(finalContexts.detached).toBe(0);
+
+  // The director's transparent layout area must not intercept the theme controls
+  // in the sticky explorer on shorter desktop screens.
+  await page.getByRole('link', { name: 'Explore six worlds', exact: true }).click();
+  await page.getByRole('group', { name: 'Globe style', exact: true }).getByRole('button', { name: 'Outline', exact: true }).click();
+  await expectHeroReady(page);
+  const light = page.getByRole('group', { name: 'Outline theme', exact: true }).getByRole('button', { name: 'Light', exact: true });
+  await light.click();
+  await expect(light).toHaveAttribute('aria-pressed', 'true');
+  await expectHeroReady(page);
+  await expect.poll(async () => (await contextCounts(page)).live).toBe(1);
   expect(errors).toEqual([]);
 });

@@ -9,7 +9,9 @@ import { CapabilitiesSection, FaqSection } from './sections/CapabilitiesSection'
 import { ExperienceSection } from './sections/ExperienceSection';
 import { BuildSection } from './sections/BuildSection';
 import { WorkspaceSection } from './sections/WorkspaceSection';
+import { HomeAtmosphere, HomeAtmosphereProvider } from './stage/HomeAtmosphere';
 import './home.css';
+import './stage/scene.css';
 
 export function HomeLanding() {
   useEffect(() => {
@@ -28,7 +30,8 @@ export function HomeLanding() {
     };
   }, []);
   return (
-    <div className="home-page">
+    <HomeAtmosphereProvider><div className="home-page">
+      <HomeAtmosphere />
       <a href="#home-content" className="home-skip">Skip to content</a>
       <Nav />
       <main id="home-content">
@@ -49,6 +52,6 @@ export function HomeLanding() {
           <span>MIT licensed</span>
         </nav>
       </footer>
-    </div>
+    </div></HomeAtmosphereProvider>
   );
 }

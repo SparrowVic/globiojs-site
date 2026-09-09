@@ -1,5 +1,10 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { GlobeKind } from '@globiojs/core';
+import { DecorationGlobe } from '@/components/shared/components/DecorationGlobe';
+import { studioHref } from '@/lib/studio-link';
+import { WORLD_PRESETS, WORLD_THEMES } from '../data/world-presets';
+import { useInViewport } from '../hooks/use-in-viewport';
 import './visual-worlds.css';
 
 interface WorldStudy {
@@ -18,7 +23,7 @@ const WORLDS = {
     character: 'Film',
     description: 'Clouds cast shadows. Cities light the night. Sunlight catches the atmosphere. Build a procedural Earth, or bring your own textures for the surface, clouds and night lights.',
     uses: 'Product reveals · Earth stories · Global brands',
-    imageDescription: 'Cinematic Earth with a brilliant blue atmosphere, drifting clouds and golden city lights on the night side.',
+    imageDescription: 'Cinematic Earth with a blue atmosphere, textured continents and drifting clouds.',
   },
   dotted: {
     kind: 'dotted',
@@ -62,13 +67,50 @@ const WORLDS = {
   },
 } satisfies Record<GlobeKind, WorldStudy>;
 
-function WorldStudy({ world, featured = false }: { readonly world: WorldStudy; readonly featured?: boolean }) {
+type PreviewStatus = 'poster' | 'loading' | 'live' | 'error';
+
+function WorldStudy({ world, featured = false, active, reducedMotion, onPreview, onStop }: {
+  readonly world: WorldStudy;
+  readonly featured?: boolean;
+  readonly active: boolean;
+  readonly reducedMotion: boolean;
+  readonly onPreview: (kind: GlobeKind) => void;
+  readonly onStop: (kind: GlobeKind) => void;
+}) {
+  const article = useRef<HTMLElement>(null);
+  const visible = useInViewport(article, { threshold: 0 });
+  const [status, setStatus] = useState<PreviewStatus>('poster');
+  const previewWasVisible = useRef(false);
   const headingId = `home-worlds-${world.kind}`;
+  const statusId = `${headingId}-status`;
+  const href = studioHref(world.kind, WORLD_THEMES[world.kind]);
+  const live = active && status === 'live';
+
+  // Release the preview when the visitor moves on; the six studies share one
+  // optional context, rather than mounting a renderer for every photograph.
+  // Keyboard focus may scroll here before IntersectionObserver reports entry.
+  useEffect(() => {
+    if (!active) previewWasVisible.current = false;
+    else if (visible) previewWasVisible.current = true;
+    else if (previewWasVisible.current) onStop(world.kind);
+  }, [active, visible, onStop, world.kind]);
+
+  const togglePreview = () => {
+    if (active) {
+      onStop(world.kind);
+      setStatus('poster');
+    } else {
+      setStatus('loading');
+      onPreview(world.kind);
+    }
+  };
+
   return (
-    <article className={`home-worlds__study home-worlds__study--${world.kind}${featured ? ' home-worlds__study--featured' : ''}`}>
-      <Link className="home-worlds__study-link" to={`/docs/kinds/${world.kind}`} aria-labelledby={headingId}>
-        <div className="home-worlds__art">
+    <article ref={article} aria-labelledby={headingId} className={`home-worlds__study home-worlds__study--${world.kind}${featured ? ' home-worlds__study--featured' : ''}${active ? ' is-previewing' : ''}`}>
+      <div className="home-worlds__art">
+        <Link className="home-worlds__art-link" to={href} aria-label={`Create a globe in ${world.name} style in Studio`}>
           <img
+            className={`home-worlds__poster${live ? ' is-hidden' : ''}`}
             src={`/home/world-${world.kind}.webp`}
             alt={world.imageDescription}
             width={1200}
@@ -76,29 +118,87 @@ function WorldStudy({ world, featured = false }: { readonly world: WorldStudy; r
             loading="lazy"
             decoding="async"
           />
-          <span className="home-worlds__image-action" aria-hidden="true">Explore {world.name} <span>↗</span></span>
+          {active && visible && <DecorationGlobe
+            key={world.kind}
+            kind={world.kind}
+            scene={WORLD_PRESETS[world.kind]}
+            speed={0.04}
+            maxFps={30}
+            resolution="low"
+            interactive={false}
+            paused={reducedMotion || !visible}
+            className={`home-worlds__canvas${live ? ' is-live' : ''}`}
+            onLive={() => setStatus('live')}
+            onError={() => { setStatus('error'); onStop(world.kind); }}
+          />}
+          <span className="home-worlds__image-action" aria-hidden="true">Make it yours <span>↗</span></span>
+        </Link>
+      </div>
+      <div className="home-worlds__study-copy">
+        <div className="home-worlds__study-title">
+          <h3 id={headingId}>{world.name}</h3>
+          <span className="home-worlds__character">{world.character}</span>
         </div>
-        <div className="home-worlds__study-copy">
-          <div className="home-worlds__study-title">
-            <h3 id={headingId}>{world.name}</h3>
-            <span className="home-worlds__character">{world.character}</span>
-          </div>
-          <p className="home-worlds__description">{world.description}</p>
-          {featured && (
-            <ul className="home-worlds__features" aria-label="Cinematic features">
-              <li>Fixed, real-time or orbiting sunlight</li>
-              <li>Cloud shadows and atmospheric scattering</li>
-              <li>City lights, route networks and aurora</li>
-            </ul>
-          )}
-          <p className="home-worlds__uses">{world.uses}</p>
+        <p className="home-worlds__description">{world.description}</p>
+        {featured && (
+          <ul className="home-worlds__features" aria-label="Cinematic features">
+            <li>Sunrise on your schedule</li>
+            <li>Cloud shadows. Atmospheric depth.</li>
+            <li>Your textures, or a procedural Earth</li>
+          </ul>
+        )}
+        <p className="home-worlds__uses">{world.uses}</p>
+        <div className="home-worlds__actions">
+          <button
+            type="button"
+            className="home-worlds__motion"
+            onClick={togglePreview}
+            aria-label={`${active ? 'Stop' : 'Preview'} ${world.name} motion`}
+            aria-pressed={active}
+            aria-describedby={reducedMotion ? 'home-worlds-motion-preference' : status === 'error' || active ? statusId : undefined}
+            disabled={reducedMotion}
+          >
+            <span className="home-worlds__play-icon" aria-hidden="true">{active ? 'Ⅱ' : '▷'}</span>
+            {active ? 'Stop preview' : 'Preview motion'}
+          </button>
+          <Link to={href} className="home-worlds__studio" aria-label={`Open ${world.name} in Studio`}>Open in Studio <span aria-hidden="true">↗</span></Link>
         </div>
-      </Link>
+        <div className="home-worlds__details">
+          <Link to={`/docs/kinds/${world.kind}`}>{world.name} guide <span aria-hidden="true">→</span></Link>
+          <p id={statusId} role="status">{status === 'error' ? 'Preview unavailable. Try this world in Studio.' : active ? status === 'loading' ? 'Starting preview…' : 'Live render' : ''}</p>
+        </div>
+      </div>
     </article>
   );
 }
 
 export function VisualWorldsSection() {
+  const [activeKind, setActiveKind] = useState<GlobeKind | null>(null);
+  const [reducedMotion, setReducedMotion] = useState(() => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const stopPreview = useCallback((kind: GlobeKind) => {
+    setActiveKind((current) => current === kind ? null : current);
+  }, []);
+
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => {
+      setReducedMotion(media.matches);
+      if (media.matches) setActiveKind(null);
+    };
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
+  const study = (kind: GlobeKind, featured = false) => <WorldStudy
+    key={kind}
+    world={WORLDS[kind]}
+    featured={featured}
+    active={activeKind === kind}
+    reducedMotion={reducedMotion}
+    onPreview={setActiveKind}
+    onStop={stopPreview}
+  />;
+
   return (
     <section id="worlds" className="home-worlds" aria-labelledby="home-worlds-heading">
       <div className="home-wrap">
@@ -107,24 +207,25 @@ export function VisualWorldsSection() {
           <p>Light it like a film. Draw it in ink. Turn it into a field of signals. Each kind has its own materials, movement and character.</p>
         </header>
 
-        <WorldStudy world={WORLDS.cinematic} featured />
+        {study('cinematic', true)}
 
         <div className="home-worlds__signals">
-          <WorldStudy world={WORLDS.dotted} />
-          <WorldStudy world={WORLDS.hologram} />
+          {study('dotted')}
+          {study('hologram')}
         </div>
 
         <p className="home-worlds__rail-hint">Three more perspectives <span>Swipe to explore <span aria-hidden="true">→</span></span></p>
         <div className="home-worlds__perspectives" aria-label="Paper, Outline and Wireframe styles">
-          <WorldStudy world={WORLDS.paper} />
-          <WorldStudy world={WORLDS.outline} />
-          <WorldStudy world={WORLDS.wireframe} />
+          {study('paper')}
+          {study('outline')}
+          {study('wireframe')}
         </div>
 
         <div className="home-worlds__next">
           <p>Choose the character.<br /> <strong>Then make it your world.</strong></p>
           <Link className="home-button-secondary" to="/studio">Try the kinds in Studio <span aria-hidden="true">↗</span></Link>
         </div>
+        {reducedMotion && <p id="home-worlds-motion-preference" className="home-worlds__motion-preference">Your reduced-motion setting keeps these previews still.</p>}
       </div>
     </section>
   );
